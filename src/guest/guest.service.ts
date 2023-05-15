@@ -1,6 +1,7 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as uuid from 'uuid';
 
 import { GUEST } from '@common/models/models';
 import { IGuest } from '@common/interfaces/guest.interface';
@@ -13,9 +14,11 @@ export class GuestService {
     ) {}
 
     async create (userId: string, guestDTO: GuestDTO): Promise<IGuest> {
+        const confirmationToken = uuid.v4();
         const newGuest = new this.model({
             userID: userId,
-            ...guestDTO
+            ...guestDTO,
+            confirmationToken
         });
 
         return await newGuest.save();
@@ -37,6 +40,20 @@ export class GuestService {
             guestDTO,
             { new: true }
         ).populate('userID');
+    }
+
+    async confirmedGuest (token: string) {
+        const guest = await this.model.findOne({ confirmationToken: token });
+
+        if (!guest) {
+            throw new HttpException('Invalid token', HttpStatus.BAD_REQUEST);
+        }
+
+        guest.confirmed = true;
+        guest.confirmationToken = undefined;
+        await guest.save();
+
+        return guest;
     }
 
     async delete (id: string) {

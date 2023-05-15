@@ -31,6 +31,11 @@ export class GuestController {
         return this._guestService.update(id, guestDTO);
     }
 
+    @MessagePattern(GuestMSG.CONFIRMED)
+    confirmedUser(@Payload() token: string) {
+        return this._guestService.confirmedGuest(token);
+    }
+
     @MessagePattern(GuestMSG.DELETE)
     delete(@Payload() id: string) {
         return this._guestService.delete(id);
