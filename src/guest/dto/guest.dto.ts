@@ -1,4 +1,5 @@
 export class GuestDTO {
-    readonly name: string;
+    readonly firstname: string;
+    readonly lastname: string;
     readonly email: string;
 }

@@ -12,8 +12,8 @@ export class GuestController {
     ) {}
 
     @MessagePattern(GuestMSG.CREATE)
-    create(@Payload() guestDTO: GuestDTO) {
-        return this._guestService.create(guestDTO);
+    create(@Payload() { userId, guestDTO }: { userId: string, guestDTO: GuestDTO }) {
+        return this._guestService.create(userId, guestDTO);
     }
 
     @MessagePattern(GuestMSG.FIND_ALL)
@@ -27,8 +27,8 @@ export class GuestController {
     }
 
     @MessagePattern(GuestMSG.UPDATE)
-    update(@Payload() payload: { id: string, guestDTO: GuestDTO }) {
-        return this._guestService.update(payload.id, payload.guestDTO);
+    update(@Payload() { id, guestDTO }: { id: string, guestDTO: GuestDTO }) {
+        return this._guestService.update(id, guestDTO);
     }
 
     @MessagePattern(GuestMSG.DELETE)

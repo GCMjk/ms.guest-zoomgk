@@ -12,18 +12,23 @@ export class GuestService {
         @InjectModel(GUEST.name) private readonly model: Model<IGuest>
     ) {}
 
-    async create (guestDTO: GuestDTO): Promise<IGuest> {
-        const newGuest = new this.model(guestDTO);
+    async create (userId: string, guestDTO: GuestDTO): Promise<IGuest> {
+        const newGuest = new this.model({
+            userID: userId,
+            ...guestDTO
+        });
 
         return await newGuest.save();
     }
 
     async findAll (): Promise<IGuest[]> {
-        return await this.model.find();
+        return await this.model.find()
+            .populate('userID');
     }
 
     async findOne (id: string): Promise<IGuest> {
-        return await this.model.findById(id);
+        return await this.model.findById(id)
+            .populate('userID');
     }
 
     async update (id: string, guestDTO: GuestDTO): Promise<IGuest> {
@@ -31,7 +36,7 @@ export class GuestService {
             id,
             guestDTO,
             { new: true }
-        );
+        ).populate('userID');
     }
 
     async delete (id: string) {
@@ -39,7 +44,7 @@ export class GuestService {
 
         return {
             status: HttpStatus.OK,
-            message: 'User deleted successfully'
+            message: 'Guest deleted successfully'
         }
     }
 }

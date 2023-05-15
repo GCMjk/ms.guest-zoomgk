@@ -8,5 +8,5 @@ export enum GuestMSG {
     FIND_ONE = 'FIND_GUEST',
     UPDATE = 'UPDATE_GUEST',
     DELETE = 'DELETE_GUEST',
-    VALID_GUEST = 'VALID_GUEST'
+    CONFIRMED = 'CONFIRMED'
 }
