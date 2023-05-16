@@ -26,6 +26,11 @@ export class GuestController {
         return this._guestService.findOne(id);
     }
 
+    @MessagePattern(GuestMSG.FIND_BY_USER_ID)
+    findByUserId(@Payload() userId: string) {
+        return this._guestService.findByUserId(userId);
+    }
+
     @MessagePattern(GuestMSG.UPDATE)
     update(@Payload() { id, guestDTO }: { id: string, guestDTO: GuestDTO }) {
         return this._guestService.update(id, guestDTO);

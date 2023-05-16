@@ -34,6 +34,10 @@ export class GuestService {
             .populate('userID');
     }
 
+    async findByUserId (userId: string): Promise<IGuest[]> {
+        return await this.model.find({ userID: { $in: userId } })
+    }
+
     async update (id: string, guestDTO: GuestDTO): Promise<IGuest> {
         return await this.model.findByIdAndUpdate(
             id,
